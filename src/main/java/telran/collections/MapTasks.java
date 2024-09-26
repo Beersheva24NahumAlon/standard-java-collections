@@ -55,10 +55,10 @@ public class MapTasks {
     }
 
     public static void dysplayDigitsDistribution() {
-        new Random().ints(0, Integer.MAX_VALUE).limit(COUNT_OF_NUMBERS).boxed()
-                .map(i -> Integer.toString(i)).flatMapToInt(s -> s.chars()).boxed()
-                .collect(Collectors.groupingBy(c -> c, Collectors.counting())).entrySet().stream()
-                .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
+        new Random().ints(0, Integer.MAX_VALUE).limit(COUNT_OF_NUMBERS)
+                .flatMap(n -> Integer.toString(n).chars()).boxed()
+                .collect(Collectors.groupingBy(c -> c, Collectors.counting()))
+                .entrySet().stream().sorted(Entry.comparingByValue(Comparator.reverseOrder()))
                 .forEach(e -> System.out.printf("%c -> %d\n", e.getKey(), e.getValue()));
 
     }
