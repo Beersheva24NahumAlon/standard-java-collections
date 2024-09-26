@@ -9,6 +9,18 @@ import static telran.collections.MapTasks.*;
 
 public class MapTasksTest {
     int[][] array = { { 100, 1, 50 }, { 20, 30 }, { 1 } };
+    Integer[] numbers = { 10, 5, 7, -4, 1 };
+    LinkedHashMap<Integer, Integer> map;
+
+    private void setUpMap() {
+        map = new LinkedHashMap<>(10, 0.75f, true) {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<Integer, Integer> eldestEntry) {
+                return size() > numbers.length;
+            }
+        };
+        Arrays.stream(numbers).forEach(n -> map.put(n, n * n));
+    }
 
     @Test
     void dysplayOccurrencesTest() {
@@ -58,5 +70,28 @@ public class MapTasksTest {
         Map<Character, Character> closeOpenMap = maps.closeOpenMap();
         assertEquals(']', openCloseMap.get('['));
         assertEquals('[', closeOpenMap.get(']'));
+    }
+
+    @Test
+    void linkedHashMapTest() {
+        setUpMap();
+        assertArrayEquals(numbers, map.keySet().toArray(Integer[]::new));
+    }
+
+    @Test
+    void linkedHashMapWithPutTest() {
+        setUpMap();
+        map.put(3, 9);
+        Integer[] expected = { 5, 7, -4, 1, 3};
+        assertArrayEquals(expected, map.keySet().toArray(Integer[]::new));
+    }
+    
+    @Test
+    void linkedHashMapWithPutAndGetTest() {
+        setUpMap();
+        map.get(10);
+        map.put(3, 9);
+        Integer[] expected = { 7, -4, 1, 10, 3};
+        assertArrayEquals(expected, map.keySet().toArray(Integer[]::new));
     }
 }
