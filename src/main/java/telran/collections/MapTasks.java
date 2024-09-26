@@ -2,6 +2,7 @@ package telran.collections;
 
 import java.util.*;
 import java.util.stream.*;
+import java.util.Map.Entry;
 
 public class MapTasks {
     private static final long COUNT_OF_NUMBERS = 1_000_000;
@@ -57,17 +58,7 @@ public class MapTasks {
         new Random().ints(0, Integer.MAX_VALUE).limit(COUNT_OF_NUMBERS).boxed()
                 .map(i -> Integer.toString(i)).flatMapToInt(s -> s.chars()).boxed()
                 .collect(Collectors.groupingBy(c -> c, Collectors.counting())).entrySet().stream()
-                .sorted((e1, e2) -> {
-                    int res = Integer.compare(e1.getKey(), e2.getKey());
-                    int zero = (int) '0';
-                    if (e1.getKey() == zero) {
-                        res = 1;
-                    }
-                    if (e2.getKey() == zero) {
-                        res = -1;
-                    }
-                    return res;
-                })
+                .sorted(Entry.comparingByValue(Comparator.reverseOrder()))
                 .forEach(e -> System.out.printf("%c -> %d\n", e.getKey(), e.getValue()));
 
     }
